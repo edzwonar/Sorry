@@ -1,3 +1,16 @@
+/**
+  * This class represents a card from 
+  * the Sorry deck
+  * Possible values: 0 (Sorry),1,2,3,4,5,7,8,10,11,12
+  * 
+  * getValue() returns card's integer value
+  * getFunction() returns the rule associated with the card
+  * as a string
+  *
+  * getImg() returns the path to the image file
+  *
+  * @author Emilie Dzwonar
+*/
 public class Card{
    
    private int value;
@@ -72,6 +85,10 @@ public void generateFunction(){
    
    public String getFunction(){
       return function;
+   }
+   
+   public String getImg(){
+      return "images/"+value+".jpg";
    }
 }
 
