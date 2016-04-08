@@ -1,0 +1,14 @@
+.button{
+    -fx-background-inset: 5,5,5,5;
+}
+.button:hover{
+    -fx-background-color: #9ACD32;
+}
+#Squares{
+    -fx-fill: grey;
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+}
+#Squares:hover {
+    -fx-fill: yellow;
+}
