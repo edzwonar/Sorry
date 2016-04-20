@@ -12,3 +12,51 @@
 #Squares:hover {
     -fx-fill: yellow;
 }
+
+Circle{
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+}
+
+#plOne{
+    -fx-fill: red;
+}
+
+#plOneSel{
+    -fx-fill: indianred;
+}
+
+#plTwo{
+    -fx-fill: blue;
+}
+
+#sd1{
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-fill: red;
+}
+#sd2{
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-fill: blue;
+}
+#sd3{
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-fill: green;
+}
+#sd4{
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-fill: yellow;
+}
+#Sorry{
+    -fx-fill: black;
+    -fx-stroke: black;
+    -fx-stroke-width: 10;
+}
+#Sorry2{
+    -fx-fill: transparent;
+    -fx-stroke: white     ;
+    -fx-stroke-width: 5;
+}
