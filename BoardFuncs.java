@@ -1,4 +1,3 @@
-package sample;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -102,6 +101,24 @@ public class BoardFuncs {
         path = Path.union(path, finish);
         path.setRotate(dir * 90);
         return path;
+    }
+
+    public static int getCurrPieceIndex(Circle[] arr, Circle currSelection) {
+        for(int i =0; i < arr.length; i++) {
+            if(arr[i].equals(currSelection)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static boolean contains(final int[] array, final int key) {
+        for (final int i : array) {
+            if (i == key) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void createBoard(Group root, Rectangle[] border, Rectangle[][] safety, Polygon[] safetyZones, Polygon[] startZones) {

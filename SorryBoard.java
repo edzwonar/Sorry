@@ -22,6 +22,13 @@ public class SorryBoard {
 
     }
 
+    public Piece[][] getPlayers() {
+        Piece[][] players = new Piece[2][];
+        players[0] = Human;
+        players[1] = Computer;
+        return players;
+    }
+
     public void nextTurn(){
         Piece[] tempArr = currentPlayer;
         currentPlayer = currentOpponent;
@@ -86,6 +93,11 @@ public class SorryBoard {
         int move;
         int[][] possMoves = new int[4][7];
         int value = currCard.getValue();
+        for(int i = 0; i < possMoves.length; i++) {
+            for(int j = 0; j < possMoves[i].length; j++) {
+                possMoves[i][j] = 99;
+            }
+        }
 
         System.out.println("Player 1 Pieces: " + Human[0].getLocationI() + ", " + Human[1].getLocationI() + ", " + Human[2].getLocationI() + ", " + Human[3].getLocationI());
         System.out.println("Player 2 Pieces: " + Computer[0].getLocationI() + ", " + Computer[1].getLocationI() + ", " + Computer[2].getLocationI() + ", " + Computer[3].getLocationI());
@@ -166,7 +178,7 @@ public class SorryBoard {
         } else if (value == 11){                                 //SWAP ONBOARD PIECE WITH OPPONENTS ONBOARD PIECE or MOVE FORWARD 11
             for (int i=0;i<4;i++){
                 int j = 0;
-                if (currentPlayer[i].inStart()) {    //*2
+                if (!currentPlayer[i].inStart() && !currentPlayer[i].inSafety()) {    //*2
                     for (Piece k : currentOpponent) {
                         if (!(k.inStart()||k.inSafety())) {//*2
                             possMoves[i][j] = k.getLocationI();
@@ -230,7 +242,7 @@ public class SorryBoard {
             if(pawn.getLocationJ() + distance <= 6 && pawn.getLocationJ() + distance>0) {
                 destination = pawn.getLocationJ() + distance + 60;
             } else {
-                destination = 0;
+                destination = 99;
             }
         }
 

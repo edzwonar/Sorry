@@ -6,51 +6,87 @@ import java.util.Scanner;
 public class SorryGame {
     SorryBoard Board;
     Deck Deck;
+    Card playerCard;
+    int round;
+    boolean playerTurn;
+    boolean gameWon;
 
     public void startGame(){
         Board = new SorryBoard();
         Deck = new Deck();
         Deck.shuffle();
-        this.turns();
-        //playagain?
+        round = 0;
+        playerTurn = true;
+        gameWon = false;
     }
 
-    public void turns(){
-        boolean humanPlayer = true; //Human player starts
-        boolean gameWon = false;
-        int round = 0;
+    public SorryBoard getBoard() {
+        return Board;
+    }
 
+    public boolean isPlayerTurn() {
+        return playerTurn;
+    }
 
-        while(gameWon == false) {
+    public void compMove() {
+        System.out.println("\nComputer turn--");
+        round++;
+        System.out.println("Round: " + round);
+        Card drawnCard = Deck.drawCard();
+        System.out.println("Card drawn was a " + drawnCard.getValue());
+        int[][] moves = Board.getMoves(drawnCard);
+        int[] choice;
+        if(hasPosMove(moves)) {
+            choice = getCompChoice(moves);
+            Board.makeMove(choice);
+        }
+        gameWon = Board.checkWin();
 
-            if(humanPlayer){System.out.println("\nHuman turn--");}
-            else {System.out.println("\nComputer turn--");}
+        if(Deck.numLeft == 0){
+            Deck.freshDeck();
+        }
+        System.out.println("Dicks");
+        Board.nextTurn();
+        playerTurn = !playerTurn;
+    }
+
+    public boolean hasPosMove(int[][] moves) {
+        if (!(moves[0][0] == 99 && moves[1][0] == 99 && moves[2][0] == 99 && moves[3][0] == 99)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void playerMove(int[] plMove) {
+        if (gameWon == false) {
+
+            if (playerTurn) {
+                System.out.println("\nHuman turn--");
+            }
             round++;
             System.out.println("Round: " + round);
 
-            Card drawnCard = Deck.drawCard();
-            System.out.println("Card drawn was a " + drawnCard.getValue());
-
-
-            int[][] moves = Board.getMoves(drawnCard);
+            int[][] moves = Board.getMoves(playerCard);
             int[] choice;
-            if(!(moves[0][0]==0&&moves[1][0]==0&&moves[2][0]==0&&moves[3][0]==0)) {
-                if(humanPlayer) {
-                    choice = getCompChoice(moves);
-                } else {
-                    choice = getCompChoice(moves);
-                }
+            if (!(moves[0][0] == 99 && moves[1][0] == 99 && moves[2][0] == 99 && moves[3][0] == 99)) {
+                choice = plMove;
+
                 Board.makeMove(choice);
             }
             gameWon = Board.checkWin();
 
-            if(Deck.numLeft == 0){
+            if (Deck.numLeft == 0) {
                 Deck.freshDeck();
             }
-
-            humanPlayer = !humanPlayer;
             Board.nextTurn();
+            playerTurn = !playerTurn;
         }
+    }
+
+    public void plDrawCard() {
+        playerCard = Deck.drawCard();
+        System.out.println("Card drawn was a " + playerCard.getValue());
+        System.out.println(playerCard.getFunction());
     }
 
     int[] getHumanChoice(int[][] moves){
