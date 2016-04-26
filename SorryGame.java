@@ -68,7 +68,7 @@ public class SorryGame {
 
             int[][] moves = Board.getMoves(playerCard);
             int[] choice;
-            if (!(moves[0][0] == 99 && moves[1][0] == 99 && moves[2][0] == 99 && moves[3][0] == 99)) {
+            if(hasPosMove(moves)) {
                 choice = plMove;
 
                 Board.makeMove(choice);
