@@ -47,7 +47,7 @@ public class SorryGame {
         }
         System.out.println("Dicks");
         Board.nextTurn();
-        playerTurn = !playerTurn;
+        //playerTurn = !playerTurn;
     }
 
     public boolean hasPosMove(int[][] moves) {
@@ -68,7 +68,7 @@ public class SorryGame {
 
             int[][] moves = Board.getMoves(playerCard);
             int[] choice;
-            if(hasPosMove(moves)) {
+            if (!(moves[0][0] == 99 && moves[1][0] == 99 && moves[2][0] == 99 && moves[3][0] == 99)) {
                 choice = plMove;
 
                 Board.makeMove(choice);
@@ -127,7 +127,12 @@ public class SorryGame {
         for (int i=0;i<4;i++){
             System.out.print("Piece " + (i+1) + " can move to : ");
             for (int j : moves[i]){
-                System.out.print(j + ", ");
+                if (j!=99){
+                    System.out.print(j + ", ");
+                } else {
+                    System.out.print("X" + ", ");
+                    j=-1;
+                }
 
                 //if roll takes pawn to HOME, make the move
                 if(j==66||j==61){

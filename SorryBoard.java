@@ -54,6 +54,7 @@ public class SorryBoard {
         }else if(square>=60){
             //60 is indicator that piece goes to safezone
             currentPlayer[piece].setLocation(currentPlayer[piece].safeIndex,square-60);
+            System.out.print(currentPlayer[piece].getLocationJ());
         }
 
         //on swap, return piece to start
@@ -64,7 +65,7 @@ public class SorryBoard {
         }
 
         //check if piece is on slide triangle
-        if (currentPlayer[piece].getLocationI() == currentOpponent[0].startIndex+5){
+        if (currentPlayer[piece].getLocationI() == currentOpponent[0].startIndex+6){
             //if any piece is on slide 1, bump it to start
             for(int i=0;i<4;i++){
                 if(currentPlayer[i].getLocationI()>currentOpponent[0].startIndex+5 && currentPlayer[i].getLocationI()<currentOpponent[0].startIndex+10){
@@ -74,17 +75,28 @@ public class SorryBoard {
                     currentOpponent[i].setLocation(currentOpponent[0].startIndex,i+1);
                 }
             }
-            currentPlayer[piece].setLocation(currentOpponent[0].startIndex+10,0);
-        } else if (currentPlayer[piece].getLocationI() == currentOpponent[0].safeIndex-1){ //slide2 check
+            currentPlayer[piece].setLocation(currentOpponent[0].startIndex+9,0);
+        } else if (currentPlayer[piece].getLocationI() == currentOpponent[0].safeIndex-1){
+            //slide2 check
             for(int i=0;i<4;i++){
-                if(currentPlayer[i].getLocationI()>currentOpponent[0].safeIndex-1 && currentPlayer[i].getLocationI()<currentOpponent[0].safeIndex+2){
+                if(currentPlayer[i].getLocationI()>currentPlayer[piece].getLocationI() && currentPlayer[i].getLocationI()<currentPlayer[piece].getLocationI()+4){
                     currentPlayer[i].setLocation(currentPlayer[0].startIndex,i+1);
                 }
-                if(currentOpponent[i].getLocationI()>currentOpponent[0].safeIndex-1 && currentOpponent[i].getLocationI()<currentOpponent[0].safeIndex+2){
+                if(currentOpponent[i].getLocationI()>currentPlayer[piece].getLocationI() && currentOpponent[i].getLocationI()<currentPlayer[piece].getLocationI()+4){
                     currentOpponent[i].setLocation(currentOpponent[0].startIndex,i+1);
                 }
             }
-            currentPlayer[piece].setLocation(currentOpponent[0].startIndex+2,0);
+            currentPlayer[piece].setLocation(currentOpponent[0].startIndex,0);
+        } else if (currentPlayer[piece].getLocationI() == 32||currentPlayer[piece].getLocationI() == 41||currentPlayer[piece].getLocationI() == 47||currentPlayer[piece].getLocationI() == 56){
+            //slides 3, 4, 5, 6 check
+            for(int i=0;i<4;i++){
+                if(currentPlayer[i].getLocationI()>currentPlayer[piece].getLocationI() && currentPlayer[i].getLocationI()<currentPlayer[piece].getLocationI()+4){
+                    currentPlayer[i].setLocation(currentPlayer[0].startIndex,i+1);
+                }
+                if(currentOpponent[i].getLocationI()>currentPlayer[piece].getLocationI() && currentOpponent[i].getLocationI()<currentPlayer[piece].getLocationI()+4){
+                    currentOpponent[i].setLocation(currentOpponent[0].startIndex,i+1);
+                }
+            }
         }
     }
 
