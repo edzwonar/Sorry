@@ -46,6 +46,16 @@ public class Main extends Application {
                     plPieces[i][j].setCenterX(border[piecePos].getX() + 25);
                     plPieces[i][j].setCenterY(border[piecePos].getY() + 25);
                 }
+                if(pieces[i][j].inStart()) {
+                    plPieces[i][j].setCenterX(BoardFuncs.getOrigin(startZones[i]).getX());
+                    plPieces[i][j].setCenterY(BoardFuncs.getOrigin(startZones[i]).getY());
+                } else if (pieces[i][j].inSafety() && pieces[i][j].getLocationJ() != 6) {
+                    plPieces[i][j].setCenterX(safety[i][pieces[i][j].getLocationJ()].getX() + 25);
+                    plPieces[i][j].setCenterY(safety[i][pieces[i][j].getLocationJ()].getY() + 25);
+                } else if(pieces[i][j].getLocationJ() == 6) {
+                    plPieces[i][j].setCenterX(BoardFuncs.getOrigin(safetyZones[i]).getX());
+                    plPieces[i][j].setCenterY(BoardFuncs.getOrigin(safetyZones[i]).getY());
+                }
             }
         }
     }
@@ -80,9 +90,16 @@ public class Main extends Application {
             if(newGame.playerCard == null) {
                 newGame.plDrawCard();
                 cardFunc.setText("Card drawn was a " + newGame.playerCard.getValue() + "\n" + newGame.playerCard.getFunction());
+                for(int[] posmoves : newGame.getBoard().getMoves(newGame.playerCard)) {
+                    for(int plsMove : posmoves) {
+                        System.out.print(plsMove);
+                    }
+                    System.out.println();
+                }
             }
             if(!newGame.hasPosMove(newGame.getBoard().getMoves(newGame.playerCard))) {
                 cardFunc.setText(cardFunc.getText() + "\n You have no possible moves, ending turn.");
+
                 newGame.getBoard().nextTurn();
                 newGame.compMove();
                 updatePlayers(newGame.getBoard().getPlayers(), border, safety, plPieces);
@@ -115,10 +132,8 @@ public class Main extends Application {
                     //two pieces with the selection highlighting
                     if(currSelection != null) {
                         currSelection.setId("plOne");
-                    }
-
-                    //check if the piece isn't already selected before performing any operation
-                    if(((Circle) e.getSource()).getId() == "plOne") {
+                    }//check if the piece isn't already selected before performing any operation
+                    if(((Circle) e.getSource()).getId() == "plOne" && newGame.playerCard != null) {
                         currSelection = ((Circle) e.getSource());
 
                         //get the piece number and the possible moves from that location
@@ -132,6 +147,18 @@ public class Main extends Application {
                                 if(z == i ) {
                                     border[i].setId("PossMove");
                                 }
+                            }
+                        }
+                        for(int i = 0; i < safety[0].length; i++) {
+                            for(int d : possMoves) {
+                                if(d - 60 == i) {
+                                    safety[0][i].setId("PossMove");
+                                }
+                            }
+                        }
+                        for(int i = 0; i < possMoves.length; i++) {
+                            if(i == 66) {
+                                safetyZones[0].setId("PossMove");
                             }
                         }
 
@@ -179,18 +206,62 @@ public class Main extends Application {
                 }
             });
         }
+
         for(Rectangle x : safety[0]) {
             x.setOnMouseClicked(e -> {
-                if(currSelection != null && canEnterSafety == true) {
-                    double rX = ((Rectangle) e.getSource()).getX();
-                    double rY = ((Rectangle) e.getSource()).getY();
-                    currSelection.setCenterY(rY + 25);
-                    currSelection.setCenterX(rX + 25);
+                //Check if the selected location is one of the possible movement locations
+                int moveIndex = 0;
+                for(int i = 0; i < safety[0].length; i++) {
+
+                    //If the location isnt a possible move loc set it to fase else set to true.
+                    if(safety[0][i].equals((Rectangle) e.getSource())) {
+                        moveIndex = i + 60;
+                        if(!BoardFuncs.contains(possMoves, i + 60)) {
+                            possibleMove = false;
+                        } else {
+                            possibleMove = true;
+                        }
+                    }
+                }
+                if(currSelection != null && possibleMove) {
+                    //clean up the board and make sure all pieces are unhighlighted
                     currSelection.setId("plOne");
                     currSelection = null;
+                    for(int i = 0; i < safety[0].length; i++) {
+                        safety[0][i].setId("Squares");
+                    }
+                    //Move the player in the game logic, get rid of their card, and update the pieces location on the gui.
+                    newGame.playerMove(new int[] {piece, moveIndex});
+                    newGame.playerCard = null;
+                    updatePlayers(newGame.getBoard().getPlayers(), border, safety, plPieces);
+                    //Player turn is over so run a computer move.
+                    newGame.compMove();
+                    updatePlayers(newGame.getBoard().getPlayers(), border, safety, plPieces);
                 }
             });
         }
+        safetyZones[0].setOnMouseClicked(e -> {
+            if(safetyZones[0].equals((Polygon) e.getSource())) {
+                if(!BoardFuncs.contains(possMoves, 66)) {
+                    possibleMove = false;
+                } else {
+                    possibleMove = true;
+                }
+            }
+            if(currSelection != null && possibleMove) {
+                //clean up the board and make sure all pieces are unhighlighted
+                currSelection.setId("plOne");
+                currSelection = null;
+                safetyZones[0].setId("Squares");
+                //Move the player in the game logic, get rid of their card, and update the pieces location on the gui.
+                newGame.playerMove(new int[] {piece, 66});
+                newGame.playerCard = null;
+                updatePlayers(newGame.getBoard().getPlayers(), border, safety, plPieces);
+                //Player turn is over so run a computer move.
+                newGame.compMove();
+                updatePlayers(newGame.getBoard().getPlayers(), border, safety, plPieces);
+            }
+        });
 
         Scene scene = new Scene(root, 1000, 1000);
         scene.getStylesheets().add("SorryBoard.css");

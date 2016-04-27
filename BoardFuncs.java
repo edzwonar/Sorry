@@ -214,7 +214,7 @@ public class BoardFuncs {
         startZones[1] = regularPolygon(8, 65.3281 , 22.5, new Point2D(border[19].getX() - 60.3553, border[19].getY() + 25));
         startZones[2] = regularPolygon(8, 65.3281 , 22.5, new Point2D(border[34].getX() + 25, border[34].getY() - 60.3553));
         startZones[3] = regularPolygon(8, 65.3281 , 22.5, new Point2D(border[49].getX() + 60.3553 + 50, border[49].getY() + 25));
-        
+
         root.getChildren().addAll(safetyZones[0], safetyZones[1], safetyZones[2], safetyZones[3], startZones[0], startZones[1], startZones[2], startZones[3]);
         //----------------slides----------------------------
         Shape sd1 = BoardFuncs.slide(0);
